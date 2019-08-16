@@ -5,17 +5,22 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
+
                 <div class="card-header">Forum Threads</div>
 
                 <div class="card-body">
                     @foreach ($threads as $thread)
                         <article>
-                            <h4>{{ $thread->title }}</h4>
+                            <h4>
+                                <a href="/threads/{{ $thread->id }}">
+                                    {{ $thread->title }}
+                                </a>
+                            </h4>
                             <div>{{ $thread->body }}</div>
+
+                            <hr>
                         </article>
                     @endforeach
-
-                    You are logged in!
                 </div>
             </div>
         </div>
