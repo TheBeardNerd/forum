@@ -5,7 +5,7 @@
 use App\Thread;
 use Faker\Generator as Faker;
 
-$factory->define(Thread::class, function (Faker $faker) {
+$factory->define(App\Thread::class, function ($faker) {
     return [
         'user_id' => function () {
             return factory('App\User')->create()->id;
