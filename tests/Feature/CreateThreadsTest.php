@@ -64,7 +64,7 @@ class CreateThreadsTest extends TestCase
 
     public function publishThread($overrides = [])
     {
-        $this->signIn();
+        $this->withExceptionHandling()->signIn();
 
         $thread = make('App\Thread', $overrides);
 
