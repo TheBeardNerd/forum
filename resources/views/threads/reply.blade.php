@@ -14,7 +14,7 @@
                 <form method="POST" action="/replies/{{ $reply->id }}/favorites">
                     @csrf
                     <button type="submit" class="btn btn-sm btn-info" {{ $reply->isFavorited() ? 'disabled' : '' }}>
-                        {{ $reply->favorites()->count() }} {{ str_plural('Favorite', $reply->favorites()->count()) }}
+                        {{ $reply->favorites_count }} {{ str_plural('Favorite', $reply->favorites_count) }}
                     </button>
                 </form>
             </div>
