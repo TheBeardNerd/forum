@@ -3,7 +3,7 @@
     <div class="card-header">
         <div class="level">
             <h6 class="flex">
-                <a href="#">
+                <a href="{{ route('profile', $reply->owner) }}">
                     {{ $reply->owner->name }}
                 </a>
                 <i class="fas fa-chevron-right fa-xs mx-1"></i>
