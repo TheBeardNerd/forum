@@ -5,10 +5,21 @@
     <div class="row">
         <div class="col-md-8">
             <div class="card mb-2">
-                <div class="card-header bg-info">
-                    <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a>
-                    <i class="fas fa-plus mx-1 text-white"></i>
-                    {{ $thread->title }}
+                <div class="card-header">
+                    <div class="level">
+                        <span class="flex">
+                            <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a>
+                            <i class="fas fa-plus mx-1 text-white"></i>
+                            {{ $thread->title }}
+                        </span>
+
+                        <form method="POST" action="{{ $thread->path() }}">
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" class="btn btn-small btn-link text-danger"><i class="far fa-trash-alt"></i></button>
+                        </form>
+                    </div>
                 </div>
 
                 <div class="card-body">

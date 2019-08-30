@@ -1,6 +1,6 @@
 <div class="card mb-2">
 
-    <div class="card-header">
+    <div class="card-header bg-secondary text-white">
         <div class="level">
             <h6 class="flex">
                 <a href="{{ route('profile', $reply->owner) }}">
