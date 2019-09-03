@@ -15,9 +15,9 @@
                         <div class="card-header bg-info">
                             <div class="level">
                                 <span class="flex">
-                                    <a href="#">{{ $thread->creator->name }}</a>
+                                <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a>
                                     <i class="fas fa-plus mx-1 text-white"></i>
-                                    {{ $thread->title }}
+                                    <a href="{{ $thread->path() }}">{{ $thread->title }}</a>
                                 </span>
 
                                 <span class="text-white">

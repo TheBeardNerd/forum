@@ -9,16 +9,18 @@
                     <div class="level">
                         <span class="flex">
                             <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a>
-                            <i class="fas fa-plus mx-1 text-white"></i>
+                            <i class="fas fa-plus mx-1"></i>
                             {{ $thread->title }}
                         </span>
 
-                        <form method="POST" action="{{ $thread->path() }}">
-                            @csrf
-                            @method('DELETE')
+                        @can ('update', $thread)
+                            <form method="POST" action="{{ $thread->path() }}">
+                                @csrf
+                                @method('DELETE')
 
-                            <button type="submit" class="btn btn-small btn-link text-danger"><i class="far fa-trash-alt"></i></button>
-                        </form>
+                                <button type="submit" class="btn btn-small btn-link text-danger"><i class="far fa-trash-alt"></i></button>
+                            </form>
+                        @endcan
                     </div>
                 </div>
 
@@ -52,7 +54,7 @@
                 <div class="card-body">
                 <p>
                     This thread was published {{ $thread->created_at->diffForHumans() }} by
-                    <a href="#">{{ $thread->creator->name }}</a>, and currently has
+                    <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a>, and currently has
                     {{ $thread->replies_count }} {{ str_plural('comment', $thread->replies_count) }}.
                 </p>
                 </div>
