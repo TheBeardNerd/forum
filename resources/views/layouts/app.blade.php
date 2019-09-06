@@ -25,6 +25,7 @@
         body { padding: 100px 0; }
         .level { display: flex; align-items: baseline; }
         .flex{ flex: 1; }
+        [v-cloak] { display: none }
 
     </style>
 </head>
