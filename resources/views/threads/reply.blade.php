@@ -10,13 +10,22 @@
                 {{ $reply->created_at->diffForHumans() }}...
             </h6>
 
-            <div>
+            <div class="level">
                 <form method="POST" action="/replies/{{ $reply->id }}/favorites">
                     @csrf
-                    <button type="submit" class="btn btn-sm btn-info" {{ $reply->isFavorited() ? 'disabled' : '' }}>
-                        {{ $reply->favorites_count }} {{ str_plural('Favorite', $reply->favorites_count) }}
+                    <button type="submit" class="btn btn-sm btn-info mr-2" {{ $reply->isFavorited() ? 'disabled' : '' }}>
+                        {{ $reply->favorites_count }} <i class="fas fa-crown"></i>
                     </button>
                 </form>
+
+                @can('update', $reply)
+                    <form action="/replies/{{ $reply->id }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit" class="btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></button>
+                    </form>
+                @endcan
             </div>
         </div>
     </div>
