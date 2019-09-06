@@ -13,10 +13,6 @@
                 </h6>
 
                 <div class="level">
-                    @can('update', $reply)
-                        <button type="button" class="btn btn-light btn-sm mr-2" @click="editing = true">Edit</button>
-                    @endcan
-
                     <form method="POST" action="/replies/{{ $reply->id }}/favorites">
                         @csrf
                         <button type="submit" class="btn btn-sm btn-info mr-2" {{ $reply->isFavorited() ? 'disabled' : '' }}>
@@ -25,13 +21,10 @@
                     </form>
 
                     @can('update', $reply)
-                        <form action="/replies/{{ $reply->id }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-
-                            <button type="submit" class="btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></button>
-                        </form>
+                        <button type="button" class="btn btn-light btn-sm mr-2" @click="editing = true">Edit</button>
+                        <button type="button" class="btn btn-danger btn-sm" @click="destroy()"><i class="far fa-trash-alt"></i></button>
                     @endcan
+
                 </div>
             </div>
         </div>

@@ -1915,6 +1915,12 @@ __webpack_require__.r(__webpack_exports__);
     cancel: function cancel() {
       this.editing = false;
       this.body = this.attributes.body;
+    },
+    destroy: function destroy() {
+      axios["delete"]("/replies/" + this.attributes.id);
+      $(this.$el).fadeOut(300, function () {
+        flash("Your reply has been deleted.");
+      });
     }
   }
 });
