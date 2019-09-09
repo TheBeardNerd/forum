@@ -13,12 +13,9 @@
                 </h6>
 
                 <div class="level">
-                    <form method="POST" action="/replies/{{ $reply->id }}/favorites">
-                        @csrf
-                        <button type="submit" class="btn btn-sm btn-info mr-2" {{ $reply->isFavorited() ? 'disabled' : '' }}>
-                            {{ $reply->favorites_count }} <i class="fas fa-crown"></i>
-                        </button>
-                    </form>
+                    @if (Auth::check())
+                        <favorite :reply="{{ $reply }}"></favorite>
+                    @endif
 
                     @can('update', $reply)
                         <button type="button" class="btn btn-light btn-sm mr-2" @click="editing = true">Edit</button>
