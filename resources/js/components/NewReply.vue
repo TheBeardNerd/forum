@@ -30,8 +30,6 @@
 
 <script>
 export default {
-  props: ["endpoint"],
-
   data() {
     return {
       body: ""
@@ -46,13 +44,15 @@ export default {
 
   methods: {
     addReply() {
-      axios.post(this.endpoint, { body: this.body }).then(response => {
-        this.body = "";
+      axios
+        .post(location.pathname + "/replies", { body: this.body })
+        .then(response => {
+          this.body = "";
 
-        flash("Your reply has been posted.");
+          flash("Your reply has been posted.");
 
-        this.$emit("created", response.data);
-      });
+          this.$emit("created", response.data);
+        });
     }
   }
 };

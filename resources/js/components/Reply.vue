@@ -5,7 +5,7 @@
         <h6 class="flex">
           <a :href="'/profiles/'+data.owner.name" v-text="data.owner.name"></a>
           <i class="fas fa-chevron-right fa-xs mx-1"></i>
-          {{ data.created_at }}...
+          <span v-text="ago"></span>
         </h6>
 
         <div class="level">
@@ -42,6 +42,7 @@
 
 <script>
 import Favorite from "./Favorite.vue";
+import moment from "moment";
 
 export default {
   props: ["data"],
@@ -57,6 +58,10 @@ export default {
   },
 
   computed: {
+    ago() {
+      // "Z" uses moment to correct timestapm from UTC
+      return moment(this.data.created_at + "Z").fromNow() + "...";
+    },
     signedIn() {
       return window.App.signedIn;
     },
