@@ -12,6 +12,13 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="https://kit.fontawesome.com/6c02b20e8c.js"></script>
+    <script>
+        window.App = {!! json_encode([
+            'csrfToken' => csrf_token(),
+            'user' => Auth::user(),
+            'signedIn' => Auth::check(),
+        ]) !!};
+    </script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -21,12 +28,10 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <style>
-
         body { padding: 100px 0; }
         .level { display: flex; align-items: baseline; }
         .flex{ flex: 1; }
         [v-cloak] { display: none }
-
     </style>
 </head>
 <body>
