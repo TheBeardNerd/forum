@@ -11,7 +11,17 @@ class ThreadWasUpdated extends Notification
 {
     use Queueable;
 
+    /**
+     * The thread that was updated.
+     *
+     * @var \App\Thread
+     */
     protected $thread;
+    /**
+     * The new reply.
+     *
+     * @var \App\Reply
+     */
     protected $reply;
 
     /**
@@ -21,7 +31,8 @@ class ThreadWasUpdated extends Notification
      */
     public function __construct($thread, $reply)
     {
-        //
+        $this->thread = $thread;
+        $this->reply = $reply;
     }
 
     /**
@@ -52,15 +63,13 @@ class ThreadWasUpdated extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray()
     {
         return [
-            'message' => 'Temporary Placeholder.'
-            // 'message' => $this->reply->owner->name . ' replied to ' . $this->thread->title,
-            // 'link' => $this->reply->path()
+            'message' => $this->reply->owner->name . ' replied to ' . $this->thread->title,
+            'link' => $this->reply->path()
         ];
     }
 }

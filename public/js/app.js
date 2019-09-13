@@ -2313,18 +2313,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      notifications: ["asdf"]
+      notifications: false
     };
   },
   created: function created() {
     var _this = this;
 
-    axios.get("/profiles/" + window.App.user.name + "/notifications").then(function (response) {
+    axios.get('/profiles/' + window.App.user.name + '/notifications').then(function (response) {
       return _this.notifications = response.data;
     });
+  },
+  methods: {
+    // "/profiles/{$user->name}/notifications/" . $user->unreadNotifications->first()->id
+    markAsRead: function markAsRead(notification) {
+      axios["delete"]('/profiles/' + window.App.user.name + '/notifications/' + notification.id);
+    }
   }
 });
 
@@ -56384,14 +56394,21 @@ var render = function() {
         _c(
           "div",
           {
-            staticClass: "dropdown-menu",
+            staticClass: "dropdown-menu dropdown-menu-right",
             attrs: { "aria-labelledby": "notificationMenuButton" }
           },
           _vm._l(_vm.notifications, function(notification) {
             return _c("div", [
-              _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-                _vm._v("Foobar")
-              ])
+              _c("a", {
+                staticClass: "dropdown-item",
+                attrs: { href: notification.data.link },
+                domProps: { textContent: _vm._s(notification.data.message) },
+                on: {
+                  click: function($event) {
+                    return _vm.markAsRead(notification)
+                  }
+                }
+              })
             ])
           }),
           0
@@ -56410,7 +56427,7 @@ var staticRenderFns = [
         pre: true,
         attrs: {
           id: "notificationMenuButton",
-          class: "nav-link",
+          class: "btn btn-link dropdown-toggle",
           href: "#",
           role: "button",
           "data-toggle": "dropdown",
@@ -68581,13 +68598,6 @@ module.exports = function(module) {
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-
-Vue.prototype.authorize = function (handler) {
-  var user = window.App.user;
-  return user ? handler(user) : false;
-};
-
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 /**
  * The following block of code may be used to automatically register your
@@ -68602,7 +68612,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 Vue.component("flash", __webpack_require__(/*! ./components/Flash.vue */ "./resources/js/components/Flash.vue")["default"]);
 Vue.component("paginator", __webpack_require__(/*! ./components/Paginator.vue */ "./resources/js/components/Paginator.vue")["default"]);
-Vue.component("user-notifications", __webpack_require__(/*! ./components/UserNotifications.vue */ "./resources/js/components/UserNotifications.vue")["default"]);
+Vue.component('user-notifications', __webpack_require__(/*! ./components/UserNotifications.vue */ "./resources/js/components/UserNotifications.vue")["default"]);
 Vue.component("thread-view", __webpack_require__(/*! ./pages/Thread.vue */ "./resources/js/pages/Thread.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -68636,6 +68646,13 @@ try {
 
   __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 } catch (e) {}
+
+window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+
+Vue.prototype.authorize = function (handler) {
+  var user = window.App.user;
+  return user ? handler(user) : false;
+};
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the

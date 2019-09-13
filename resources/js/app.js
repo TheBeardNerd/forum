@@ -4,14 +4,6 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-window.Vue = require("vue");
-
-Vue.prototype.authorize = function(handler) {
-    let user = window.App.user;
-
-    return user ? handler(user) : false;
-};
-
 require("./bootstrap");
 
 /**
@@ -27,10 +19,7 @@ require("./bootstrap");
 
 Vue.component("flash", require("./components/Flash.vue").default);
 Vue.component("paginator", require("./components/Paginator.vue").default);
-Vue.component(
-    "user-notifications",
-    require("./components/UserNotifications.vue").default
-);
+Vue.component('user-notifications', require('./components/UserNotifications.vue').default);
 
 Vue.component("thread-view", require("./pages/Thread.vue").default);
 
