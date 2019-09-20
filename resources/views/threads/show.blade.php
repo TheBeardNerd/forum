@@ -14,7 +14,7 @@
                         <div class="level">
                             <span class="flex">
                                 <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a>
-                                <i class="fas fa-plus mx-1"></i>
+                                <i class="fas fa-plus text-secondary mx-1"></i>
                                 {{ $thread->title }}
                             </span>
 
