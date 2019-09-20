@@ -56324,7 +56324,7 @@ var render = function() {
                 )
               ])
             ])
-          : _c("div", { domProps: { textContent: _vm._s(_vm.body) } })
+          : _c("div", { domProps: { innerHTML: _vm._s(_vm.body) } })
       ])
     ]
   )
