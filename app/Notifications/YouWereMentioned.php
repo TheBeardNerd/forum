@@ -11,12 +11,15 @@ class YouWereMentioned extends Notification
 {
     use Queueable;
 
+    /**
+     * @var \App\Reply
+     */
     protected $reply;
 
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param \App\Reply $reply
      */
     public function __construct($reply)
     {

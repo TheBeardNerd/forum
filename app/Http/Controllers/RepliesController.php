@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Forms\CreatePostForm;
-use App\Notifications\YouWereMentioned;
 use App\Reply;
 use App\Thread;
-use App\User;
-use Illuminate\Http\Request;
 
 class RepliesController extends Controller
 {
@@ -19,6 +16,12 @@ class RepliesController extends Controller
         $this->middleware('auth', ['except' => 'index']);
     }
 
+    /**
+     * Fetch all relevant replies.
+     *
+     * @param integer $channelId
+     * @param Thread $thread
+     */
     public function index($channelId, Thread $thread)
     {
         return $thread->replies()->paginate(20);
@@ -27,48 +30,39 @@ class RepliesController extends Controller
     /**
      * Persist a new reply.
      *
-     * @param $channelId
+     * @param integer $channelId
      * @param Thread $thread
      * @param CreatePostForm $form
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function store($channelId, Thread $thread, CreatePostForm $form)
     {
-        $reply = $thread->addReply([
+        return $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id()
-        ]);
-
-        preg_match_all('/\@([^\s\.]+)/', $reply->body, $matches);
-
-        $names = $matches[1];
-
-        foreach ($names as $name) {
-            $user = User::whereName($name)->first();
-
-            if ($user) {
-                $user->notify(new YouWereMentioned($reply));
-            }
-        }
-
-        return $reply->load('owner');
+        ])->load('owner');
     }
 
+    /**
+     * Update an existing reply.
+     *
+     * @param Reply $reply
+     */
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
 
-        try {
-            $this->validate(request(), ['body' => 'required|spamfree']);
-            $reply->update(request(['body']));
-        } catch (\Exception $e) {
-            return response(
-                'Sorry, your reply could not be saved at this time.',
-                422
-            );
-        }
+        $this->validate(request(), ['body' => 'required|spamfree']);
+
+        $reply->update(request(['body']));
     }
 
+    /**
+     * Delete the given reply.
+     *
+     * @param Reply $reply
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy(Reply $reply)
     {
         $this->authorize('update', $reply);

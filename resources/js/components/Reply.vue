@@ -25,14 +25,16 @@
 
     <div class="card-body">
       <div v-if="editing">
-        <div class="form-group">
-          <textarea class="form-control" v-model="body"></textarea>
-        </div>
+        <form @submit="update">
+          <div class="form-group">
+            <textarea class="form-control" v-model="body" required></textarea>
+          </div>
 
-        <button type="button" class="btn btn-info btn-sm" @click="update()">Update</button>
-        <button type="button" class="btn btn-danger btn-sm" @click="cancel()">
-          <i class="fas fa-ban"></i>
-        </button>
+          <button type="submit" class="btn btn-info btn-sm">Update</button>
+          <button type="button" class="btn btn-danger btn-sm" @click="cancel">
+            <i class="fas fa-ban"></i>
+          </button>
+        </form>
       </div>
 
       <div v-else v-text="body"></div>
