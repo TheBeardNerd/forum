@@ -4,18 +4,20 @@
     <!-- <form method="POST" action="{{ $thread->path() . '/replies' }}"> -->
     <!-- @csrf -->
     <div v-if="signedIn">
-      <div class="form-group">
-        <textarea
-          name="body"
-          class="form-control"
-          id="body"
-          placeholder="Leave a reply"
-          rows="5"
-          required
-          v-model="body"
-        ></textarea>
-      </div>
-      <button type="submit" class="btn btn-info text text-white" @click="addReply">Reply</button>
+      <form @submit="addReply">
+        <div class="form-group">
+          <textarea
+            name="body"
+            class="form-control"
+            id="body"
+            placeholder="Leave a reply"
+            rows="5"
+            required
+            v-model="body"
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-info text text-white">Reply</button>
+      </form>
     </div>
     <!-- </form>
     @else-->

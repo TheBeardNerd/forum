@@ -29,7 +29,7 @@
 
     <style>
         body { padding: 100px 0; }
-        .level { display: flex; align-items: baseline; }
+        .level { display: flex; align-items: center; }
         .flex{ flex: 1; }
         [v-cloak] { display: none }
     </style>
