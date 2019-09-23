@@ -67,7 +67,7 @@ class User extends Authenticatable
 
     public function avatar()
     {
-        return asset('storage/' . $this->avatar_path ?: 'avatars/default.png');
+        return $this->avatar_path ?: 'avatars/default.png';
     }
 
     public function visitedThreadCacheKey($thread)
