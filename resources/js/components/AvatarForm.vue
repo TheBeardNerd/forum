@@ -1,29 +1,28 @@
 <template>
   <div>
-    <img class="rounded-circle" :src="avatar" alt="profile-avatar" width="100" height="100" />
+    <label for="avatar-input">
+      <img class="rounded-circle" :src="avatar" alt="profile-avatar" width="100" height="100" />
+    </label>
 
     <!-- Avatar Form -->
-    <form v-if="canUpdate" method="post" enctype="multipart/form-data">
+    <form v-if="canUpdate" method="POST" enctype="multipart/form-data">
       <div class="form-group">
-        <input
-          name="avatar"
-          type="file"
-          class="form-control-file mb-2"
-          accept="image/*"
-          @change="onChange"
-        />
-        <button type="submit" class="btn btn-info">Add Avatar</button>
+        <image-upload id="avatar-input" name="avatar" @loaded="onLoad"></image-upload>
       </div>
     </form>
   </div>
 </template>
 <script>
+import ImageUpload from "./ImageUpload.vue";
+
 export default {
   props: ["user"],
 
+  components: { ImageUpload },
+
   data() {
     return {
-      avatar: this.user.avatar_path
+      avatar: "/storage/" + this.user.avatar_path
     };
   },
 
@@ -34,23 +33,13 @@ export default {
   },
 
   methods: {
-    onChange(e) {
-      if (!e.target.files.length) return;
+    onLoad(avatar) {
+      this.avatar = avatar.src;
 
-      let avatar = e.target.files[0];
-
-      let reader = new FileReader();
-
-      reader.readAsDataURL(avatar);
-
-      reader.onload = e => {
-        this.avatar = e.target.result;
-      };
-
-      this.persist(avatar);
+      this.persist(avatar.file);
     },
 
-    persist() {
+    persist(avatar) {
       let data = new FormData();
 
       data.append("avatar", avatar);

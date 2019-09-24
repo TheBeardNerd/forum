@@ -12,7 +12,7 @@
                 <div class="card mb-2">
                     <div class="card-header">
                         <div class="level">
-                            <img src="/storage/{{ $thread->creator->avatar() }}" alt="{{ $thread->creator->name }}" width="25" height="25" class="rounded-circle mr-2">
+                            <img src="/storage/{{ $thread->creator->avatar_path }}" alt="{{ $thread->creator->name }}" width="25" height="25" class="rounded-circle mr-2">
                             <span class="flex">
                                 <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a>
                                 <i class="fas fa-plus text-secondary mx-1"></i>
