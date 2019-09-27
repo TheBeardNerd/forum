@@ -33,7 +33,6 @@
         .flex{ flex: 1; }
         [v-cloak] { display: none }
         #avatar-input { display: none }
-        .change-avatar { cursor: pointer; box-shadow: inset 0px 0px 300px 200px rgba(0,0,0,0.5) }
     </style>
 
     @yield('header')

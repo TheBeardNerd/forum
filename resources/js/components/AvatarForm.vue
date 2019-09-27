@@ -1,12 +1,20 @@
 <template>
   <div>
-    <label for="avatar-input">
-      <img class="rounded-circle" :src="avatar" alt="profile-avatar" width="100" height="100" />
+    <label for="avatar-input" class="d-flex align-items-center flex-column">
+      <img
+        class="rounded-circle"
+        :class="classes"
+        :src="avatar"
+        alt="profile-avatar"
+        width="100"
+        height="100"
+      />
     </label>
 
     <!-- Avatar Form -->
     <form v-if="canUpdate" method="POST" enctype="multipart/form-data">
       <div class="form-group">
+        <h5>Change Avatar</h5>
         <image-upload id="avatar-input" name="avatar" @loaded="onLoad"></image-upload>
       </div>
     </form>
@@ -22,11 +30,15 @@ export default {
 
   data() {
     return {
-      avatar: "/storage/" + this.user.avatar_path
+      avatar: "/storage/" + this.user.avatar_path,
+      changeAvatar: this.authorize(user => user.id === this.user.id)
     };
   },
 
   computed: {
+    classes() {
+      return [this.changeAvatar ? "change-avatar" : ""];
+    },
     canUpdate() {
       return this.authorize(user => user.id === this.user.id);
     }
@@ -51,3 +63,12 @@ export default {
   }
 };
 </script>
+
+<style>
+.change-avatar {
+  cursor: pointer;
+}
+.change-avatar:hover {
+  opacity: 0.8;
+}
+</style>
