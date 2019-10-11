@@ -22,6 +22,10 @@ class Thread extends Model
             $builder->withCount('replies');
         });
 
+        static::created(function ($thread) {
+            $thread->update(['slug' => $thread->title]);
+        });
+
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
         });
@@ -29,7 +33,7 @@ class Thread extends Model
 
     public function path()
     {
-        return "/threads/{$this->channel->slug}/{$this->id}";
+        return "/threads/{$this->channel->slug}/{$this->slug}";
     }
 
     public function creator()
@@ -110,5 +114,31 @@ class Thread extends Model
     public function visits()
     {
         return new Visits($this);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public function setSlugAttribute($value)
+    {
+        $slug = str_slug($value);
+
+        if (static::whereSlug($slug)->exists()) {
+            $slug = "{$slug}-" . $this->id;
+        }
+        $this->attributes['slug'] = $slug;
+    }
+
+    protected function incrementSlug($slug, $count = 2)
+    {
+        // $max = static::whereTitle($this->title)->latest('id')->value('slug');
+        // if (is_numeric($max[-1])) {
+        //     return preg_replace_callback('/(\d+)$/', function ($matches) {
+        //         return $matches[1] + 1;
+        //     }, $max);
+        // }
+        // return "{$slug}-2";
     }
 }
