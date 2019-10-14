@@ -23,7 +23,7 @@ export default {
         "btn",
         "btn-sm",
         "mr-2",
-        this.active ? "btn-info" : "btn-outline-light"
+        this.active ? "btn-info" : "btn-outline-dark"
       ];
     },
 

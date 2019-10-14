@@ -3153,7 +3153,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     classes: function classes() {
-      return ["btn", "btn-sm", "mr-2", this.active ? "btn-info" : "btn-outline-light"];
+      return ["btn", "btn-sm", "mr-2", this.active ? "btn-info" : "btn-outline-dark"];
     },
     endpoint: function endpoint() {
       return "/replies/" + this.reply.id + "/favorites";
@@ -3200,7 +3200,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ["message"],
   data: function data() {
     return {
-      body: "",
+      body: this.message,
       level: "success",
       show: false
     };
@@ -3209,7 +3209,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     if (this.message) {
-      this.flash(this.message);
+      this.flash();
     }
 
     window.events.$on("flash", function (data) {
@@ -3218,8 +3218,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     flash: function flash(data) {
-      this.body = data.message;
-      this.level = data.level;
+      if (data) {
+        this.body = data.message;
+        this.level = data.level;
+      }
+
       this.show = true;
       this.hide();
     },
@@ -3553,6 +3556,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3564,7 +3579,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       editing: false,
       id: this.data.id,
-      body: this.data.body
+      body: this.data.body,
+      isBest: false
     };
   },
   computed: {
@@ -3603,6 +3619,9 @@ __webpack_require__.r(__webpack_exports__);
     destroy: function destroy() {
       axios["delete"]("/replies/" + this.data.id);
       this.$emit("deleted", this.data.id);
+    },
+    markBestReply: function markBestReply() {
+      this.isBest = true;
     }
   }
 });
@@ -58165,58 +58184,80 @@ var render = function() {
     "div",
     { staticClass: "card mb-2", attrs: { id: "reply-" + _vm.id } },
     [
-      _c("div", { staticClass: "card-header bg-secondary text-white" }, [
-        _c("div", { staticClass: "level" }, [
-          _c("h6", { staticClass: "flex" }, [
-            _c("a", {
-              attrs: { href: "/profiles/" + _vm.data.owner.name },
-              domProps: { textContent: _vm._s(_vm.data.owner.name) }
-            }),
-            _vm._v(" "),
-            _c("i", { staticClass: "fas fa-chevron-right fa-xs mx-1" }),
-            _vm._v(" "),
-            _c("span", { domProps: { textContent: _vm._s(_vm.ago) } })
-          ]),
-          _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "card-header", class: _vm.isBest ? "bg-success" : "" },
+        [
           _c("div", { staticClass: "level" }, [
-            _vm.signedIn
-              ? _c("div", [_c("favorite", { attrs: { reply: _vm.data } })], 1)
-              : _vm._e(),
+            _c("h6", { staticClass: "flex" }, [
+              _c("a", {
+                attrs: { href: "/profiles/" + _vm.data.owner.name },
+                domProps: { textContent: _vm._s(_vm.data.owner.name) }
+              }),
+              _vm._v(" "),
+              _c("i", { staticClass: "fas fa-chevron-right fa-xs mx-1" }),
+              _vm._v(" "),
+              _c("span", { domProps: { textContent: _vm._s(_vm.ago) } })
+            ]),
             _vm._v(" "),
-            _vm.canUpdate
-              ? _c("div", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-light btn-sm mr-1",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          _vm.editing = true
+            _c("div", { staticClass: "level" }, [
+              _vm.signedIn
+                ? _c("div", [_c("favorite", { attrs: { reply: _vm.data } })], 1)
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.canUpdate
+                ? _c("div", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-dark btn-sm mr-1",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.editing = true
+                          }
                         }
-                      }
-                    },
-                    [_vm._v("Edit")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger btn-sm",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.destroy()
+                      },
+                      [_vm._v("Edit")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-danger btn-sm mr-1",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.destroy()
+                          }
                         }
-                      }
-                    },
-                    [_c("i", { staticClass: "far fa-trash-alt" })]
-                  )
-                ])
-              : _vm._e()
+                      },
+                      [_c("i", { staticClass: "far fa-trash-alt" })]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: !_vm.isBest,
+                            expression: "! isBest"
+                          }
+                        ],
+                        staticClass: "btn btn-outline-dark btn-sm",
+                        attrs: { type: "button" },
+                        on: { click: _vm.markBestReply }
+                      },
+                      [_c("i", { staticClass: "fas fa-check" })]
+                    )
+                  ])
+                : _vm._e()
+            ])
           ])
-        ])
-      ]),
+        ]
+      ),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
         _vm.editing
