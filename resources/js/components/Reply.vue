@@ -13,7 +13,7 @@
             <favorite :reply="data"></favorite>
           </div>
 
-          <div v-if="canUpdate">
+          <div v-if="authorize('updateReply', reply)">
             <button
               type="button"
               class="btn btn-outline-dark btn-sm mr-1"
@@ -68,7 +68,8 @@ export default {
       editing: false,
       id: this.data.id,
       body: this.data.body,
-      isBest: false
+      isBest: this.data.isBest,
+      reply: this.data
     };
   },
 
@@ -76,14 +77,13 @@ export default {
     ago() {
       // "Z" uses moment to correct timestapm from UTC
       return moment(this.data.created_at + "Z").fromNow() + "...";
-    },
-    signedIn() {
-      return window.App.signedIn;
-    },
-
-    canUpdate() {
-      return this.authorize(user => this.data.user_id == user.id);
     }
+  },
+
+  created() {
+    window.events.$on("best-reply-selected", id => {
+      this.isBest = id === this.id;
+    });
   },
 
   methods: {
@@ -112,7 +112,9 @@ export default {
       this.$emit("deleted", this.data.id);
     },
     markBestReply() {
-      this.isBest = true;
+      axios.post("/replies/" + this.data.id + "/best");
+
+      window.events.$emit("best-reply-selected", this.data.id);
     }
   }
 };

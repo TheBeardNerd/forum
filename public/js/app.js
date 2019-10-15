@@ -3328,11 +3328,6 @@ __webpack_require__.r(__webpack_exports__);
       body: ""
     };
   },
-  computed: {
-    signedIn: function signedIn() {
-      return window.App.signedIn;
-    }
-  },
   mounted: function mounted() {
     $("#body").atwho({
       at: "@",
@@ -3580,24 +3575,22 @@ __webpack_require__.r(__webpack_exports__);
       editing: false,
       id: this.data.id,
       body: this.data.body,
-      isBest: false
+      isBest: this.data.isBest,
+      reply: this.data
     };
   },
   computed: {
     ago: function ago() {
       // "Z" uses moment to correct timestapm from UTC
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(this.data.created_at + "Z").fromNow() + "...";
-    },
-    signedIn: function signedIn() {
-      return window.App.signedIn;
-    },
-    canUpdate: function canUpdate() {
-      var _this = this;
-
-      return this.authorize(function (user) {
-        return _this.data.user_id == user.id;
-      });
     }
+  },
+  created: function created() {
+    var _this = this;
+
+    window.events.$on("best-reply-selected", function (id) {
+      _this.isBest = id === _this.id;
+    });
   },
   methods: {
     update: function update() {
@@ -3621,7 +3614,8 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit("deleted", this.data.id);
     },
     markBestReply: function markBestReply() {
-      this.isBest = true;
+      axios.post("/replies/" + this.data.id + "/best");
+      window.events.$emit("best-reply-selected", this.data.id);
     }
   }
 });
@@ -58205,7 +58199,7 @@ var render = function() {
                 ? _c("div", [_c("favorite", { attrs: { reply: _vm.data } })], 1)
                 : _vm._e(),
               _vm._v(" "),
-              _vm.canUpdate
+              _vm.authorize("updateReply", _vm.reply)
                 ? _c("div", [
                     _c(
                       "button",
@@ -70603,6 +70597,22 @@ var app = new Vue({
 
 /***/ }),
 
+/***/ "./resources/js/authorizations.js":
+/*!****************************************!*\
+  !*** ./resources/js/authorizations.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var user = window.App.user;
+module.exports = {
+  updateReply: function updateReply(reply) {
+    return reply.user_id === user.id;
+  }
+};
+
+/***/ }),
+
 /***/ "./resources/js/bootstrap.js":
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
@@ -70626,16 +70636,28 @@ try {
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
-Vue.prototype.authorize = function (handler) {
-  var user = window.App.user;
-  return user ? handler(user) : false;
+var authorizations = __webpack_require__(/*! ./authorizations */ "./resources/js/authorizations.js");
+
+Vue.prototype.authorize = function () {
+  if (!window.App.signedIn) return false;
+
+  for (var _len = arguments.length, params = new Array(_len), _key = 0; _key < _len; _key++) {
+    params[_key] = arguments[_key];
+  }
+
+  if (typeof params[0] === 'string') {
+    return authorizations[params[0]](params[1]);
+  }
+
+  return params[0](window.App.user);
 };
+
+Vue.prototype.signedIn = window.App.signedIn;
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
-
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
