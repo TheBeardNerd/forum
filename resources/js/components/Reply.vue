@@ -3,17 +3,17 @@
     <div class="card-header" :class="isBest ? 'bg-success' : ''">
       <div class="level">
         <h6 class="flex">
-          <a :href="'/profiles/'+data.owner.name" v-text="data.owner.name"></a>
+          <a :href="'/profiles/'+reply.owner.name" v-text="reply.owner.name"></a>
           <i class="fas fa-chevron-right fa-xs mx-1"></i>
           <span v-text="ago"></span>
         </h6>
 
         <div class="level">
           <div v-if="signedIn">
-            <favorite :reply="data"></favorite>
+            <favorite :reply="reply"></favorite>
           </div>
 
-          <div v-if="authorize('updateReply', reply)">
+          <div v-if="authorize('owns', reply)">
             <button
               type="button"
               class="btn btn-outline-dark btn-sm mr-1"
@@ -25,8 +25,8 @@
             <button
               type="button"
               class="btn btn-outline-dark btn-sm"
-              v-show="! isBest"
               @click="markBestReply"
+              v-if="authorize('owns', reply.thread)"
             >
               <i class="fas fa-check"></i>
             </button>
@@ -59,24 +59,23 @@ import Favorite from "./Favorite.vue";
 import moment from "moment";
 
 export default {
-  props: ["data"],
+  props: ["reply"],
 
   components: { Favorite },
 
   data() {
     return {
       editing: false,
-      id: this.data.id,
-      body: this.data.body,
-      isBest: this.data.isBest,
-      reply: this.data
+      id: this.reply.id,
+      body: this.reply.body,
+      isBest: this.reply.isBest
     };
   },
 
   computed: {
     ago() {
       // "Z" uses moment to correct timestapm from UTC
-      return moment(this.data.created_at + "Z").fromNow() + "...";
+      return moment(this.reply.created_at + "Z").fromNow() + "...";
     }
   },
 
@@ -89,11 +88,11 @@ export default {
   methods: {
     update() {
       axios
-        .patch("/replies/" + this.data.id, {
+        .patch("/replies/" + this.id, {
           body: this.body
         })
         .catch(error => {
-          this.body = this.data.body;
+          this.body = this.reply.body;
           flash(error.response.data, "danger");
         });
 
@@ -104,17 +103,17 @@ export default {
     cancel() {
       this.editing = false;
 
-      this.body = this.data.body;
+      this.body = this.reply.body;
     },
     destroy() {
-      axios.delete("/replies/" + this.data.id);
+      axios.delete("/replies/" + this.id);
 
-      this.$emit("deleted", this.data.id);
+      this.$emit("deleted", this.id);
     },
     markBestReply() {
-      axios.post("/replies/" + this.data.id + "/best");
+      axios.post("/replies/" + this.id + "/best");
 
-      window.events.$emit("best-reply-selected", this.data.id);
+      window.events.$emit("best-reply-selected", this.id);
     }
   }
 };
