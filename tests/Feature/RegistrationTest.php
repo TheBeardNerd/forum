@@ -13,18 +13,18 @@ class RegistrationTest extends TestCase
     use DatabaseMigrations;
 
     // /** @test */
-    // public function a_confirmaition_email_is_sent_upon_registration()
-    // {
-    //     Mail::fake();
+    public function a_confirmaition_email_is_sent_upon_registration()
+    {
+        Mail::fake();
 
-    //     $this->post('/register', [
-    //         'name' => 'John',
-    //         'email' => 'john@example.com',
-    //         'password' => 'foobar'
-    //     ]);
+        $this->post('/register', [
+            'name' => 'John',
+            'email' => 'john@example.com',
+            'password' => 'foobar'
+        ]);
 
-    //     Mail::assertSent(VerifyEmail::class);
-    // }
+        Mail::assertQueued(VerifyEmail::class);
+    }
 
     /** @test */
     public function user_can_fully_confirm_their_email_addresses()

@@ -1,0 +1,8 @@
+{
+    "liveServer.settings.https": {
+        "enable": true, //set it true to enable the feature.
+        "cert": "~/.localhost-ssl/localhost.crt", //full path
+        "key": "~/.localhost-ssl/localhost.key", //full path
+        "passphrase": ""
+    },
+}
