@@ -19,12 +19,7 @@ export default {
 
   computed: {
     classes() {
-      return [
-        "btn",
-        "btn-sm",
-        "mr-2",
-        this.active ? "btn-info" : "btn-outline-dark"
-      ];
+      return ["btn", "btn-sm", this.active ? "btn-info" : "btn-link text-dark"];
     },
 
     endpoint() {

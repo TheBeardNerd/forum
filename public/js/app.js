@@ -3153,7 +3153,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     classes: function classes() {
-      return ["btn", "btn-sm", "mr-2", this.active ? "btn-info" : "btn-outline-dark"];
+      return ["btn", "btn-sm", this.active ? "btn-info" : "btn-link text-dark"];
     },
     endpoint: function endpoint() {
       return "/replies/" + this.reply.id + "/favorites";
@@ -3565,6 +3565,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3742,13 +3747,39 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       repliesCount: this.thread.replies_count,
-      locked: this.thread.locked
+      locked: this.thread.locked,
+      editing: false,
+      title: this.thread.title,
+      body: this.thread.body,
+      form: {
+        title: this.thread.title,
+        body: this.thread.body
+      }
     };
   },
   methods: {
     toggleLock: function toggleLock() {
-      axios[this.locked ? "delete" : "post"]("/locked-threads/" + this.thread.slug);
+      var uri = "/locked-threads/".concat(this.thread.slug);
+      axios[this.locked ? "delete" : "post"](uri);
       this.locked = !this.locked;
+    },
+    update: function update() {
+      var _this = this;
+
+      var uri = "/threads/".concat(this.thread.channel.slug, "/").concat(this.thread.slug);
+      axios.patch(uri, this.form).then(function () {
+        _this.editing = false;
+        _this.title = _this.form.title;
+        _this.body = _this.form.body;
+        flash("Your thread has been updated.");
+      });
+    },
+    resetForm: function resetForm() {
+      this.form = {
+        title: this.title,
+        body: this.body
+      };
+      this.editing = false;
     }
   }
 });
@@ -58220,7 +58251,7 @@ var render = function() {
                     _c(
                       "button",
                       {
-                        staticClass: "btn btn-outline-dark btn-sm mr-1",
+                        staticClass: "btn btn-link text-success btn-sm",
                         attrs: { type: "button" },
                         on: {
                           click: function($event) {
@@ -58228,22 +58259,30 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Edit")]
+                      [
+                        _vm._v("\n            Edit\n            "),
+                        _c("i", { staticClass: "fas fa-edit ml-1" })
+                      ]
                     ),
                     _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-outline-danger btn-sm mr-1",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.destroy()
-                          }
-                        }
-                      },
-                      [_c("i", { staticClass: "far fa-trash-alt" })]
-                    ),
+                    _vm.editing
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn btnlink text-danger btn-sm",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.destroy()
+                              }
+                            }
+                          },
+                          [
+                            _vm._v("\n            Delete\n            "),
+                            _c("i", { staticClass: "far fa-trash-alt" })
+                          ]
+                        )
+                      : _vm._e(),
                     _vm._v(" "),
                     _vm.authorize("owns", _vm.reply.thread)
                       ? _c(
@@ -58294,7 +58333,7 @@ var render = function() {
                 _c(
                   "button",
                   {
-                    staticClass: "btn btn-info btn-sm",
+                    staticClass: "btn btn-info btn-sm text-light",
                     attrs: { type: "submit" }
                   },
                   [_vm._v("Update")]

@@ -14,12 +14,17 @@
           </div>
 
           <div v-if="authorize('owns', reply)">
+            <button type="button" class="btn btn-link text-success btn-sm" @click="editing = true">
+              Edit
+              <i class="fas fa-edit ml-1"></i>
+            </button>
             <button
+              v-if="editing"
               type="button"
-              class="btn btn-outline-dark btn-sm mr-1"
-              @click="editing = true"
-            >Edit</button>
-            <button type="button" class="btn btn-outline-danger btn-sm mr-1" @click="destroy()">
+              class="btn btnlink text-danger btn-sm"
+              @click="destroy()"
+            >
+              Delete
               <i class="far fa-trash-alt"></i>
             </button>
             <button
@@ -42,7 +47,7 @@
             <textarea class="form-control" v-model="body" required></textarea>
           </div>
 
-          <button type="submit" class="btn btn-info btn-sm">Update</button>
+          <button type="submit" class="btn btn-info btn-sm text-light">Update</button>
           <button type="button" class="btn btn-danger btn-sm" @click="cancel">
             <i class="fas fa-ban"></i>
           </button>

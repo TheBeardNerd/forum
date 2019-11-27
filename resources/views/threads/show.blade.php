@@ -8,32 +8,9 @@
 <thread-view :thread="{{ $thread }}" inline-template>
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
-                <div class="card mb-2">
-                    <div class="card-header">
-                        <div class="level">
-                            <img src="/storage/{{ $thread->creator->avatar_path }}" alt="{{ $thread->creator->name }}" width="25" height="25" class="rounded-circle mr-2">
-                            <span class="flex">
-                                <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a>
-                                <i class="fas fa-plus text-secondary mx-1"></i>
-                                {{ $thread->title }}
-                            </span>
+            <div class="col-md-8" v-cloak>
 
-                            @can ('update', $thread)
-                                <form method="POST" action="{{ $thread->path() }}">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit" class="btn btn-small btn-link text-danger"><i class="far fa-trash-alt"></i></button>
-                                </form>
-                            @endcan
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <div>{{ $thread->body }}</div>
-                    </div>
-                </div>
+                @include('threads._question')
 
                 <div class="ml-5">
 

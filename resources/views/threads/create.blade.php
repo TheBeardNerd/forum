@@ -38,13 +38,13 @@
                             <textarea class="form-control" name="body" id="body" rows="8" required>{{ old('body') }}</textarea>
                         </div>
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <div class="g-recaptcha" data-sitekey="6LdWMb4UAAAAAMt-xwPSsV-2q3GXUpqqEzcOpid8"></div>
-                            <p>hello</p>
-                        </div>
+                        </div> --}}
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Publish</button>
+                            <button type="submit" class="btn btn-primary mr-1">Publish</button>
+                            <a class="btn btn-danger" href="{{ route('threads') }}" role="button">Cancel</a>
                         </div>
 
                         @if (count($errors))
