@@ -1,5 +1,8 @@
 window._ = require("lodash");
 
+import VueInstantSearch from 'vue-instantsearch';
+import algoliasearch from 'algoliasearch/lite';
+
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -14,6 +17,9 @@ try {
 } catch (e) { }
 
 window.Vue = require("vue");
+
+Vue.use(VueInstantSearch);
+Vue.use(algoliasearch);
 
 let authorizations = require('./authorizations');
 

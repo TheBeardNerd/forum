@@ -10,6 +10,23 @@
         </div>
 
         <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    Search
+                </div>
+
+                <div class="card-body">
+                    <form action="/threads/search" method="GET">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Search for something..." aria-label="Search" aria-describedby="search">
+                            <div class="input-group-append">
+                                <button class="btn btn-info" type="submit" id="search">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             @if (count($trending))
                 <div class="card">
                     <div class="card-header">

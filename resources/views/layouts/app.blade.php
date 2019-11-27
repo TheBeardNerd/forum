@@ -33,6 +33,7 @@
         .flex{ flex: 1; }
         [v-cloak] { display: none }
         #avatar-input { display: none }
+        .ais-highlight em { background: yellow; font-style: normal; }
     </style>
 
     @yield('header')

@@ -16,12 +16,12 @@ class CreateThreadsTest extends TestCase
     {
         parent::setUp();
 
-        app()->singleton(Recaptcha::class, function () {
+        // app()->singleton(Recaptcha::class, function () {
 
-            return \Mockery::mock(Recaptcha::class, function ($m) {
-                $m->shouldReceive('passes')->andReturn(true);
-            });
-        });
+        //     return \Mockery::mock(Recaptcha::class, function ($m) {
+        //         $m->shouldReceive('passes')->andReturn(true);
+        //     });
+        // });
     }
 
     /** @test */
@@ -73,14 +73,14 @@ class CreateThreadsTest extends TestCase
             ->assertSessionHasErrors('body');
     }
 
-    /** @test */
-    function a_thread_requires_recaptcha_verification()
-    {
-        unset(app()[Recaptcha::class]);
+    // /** @test */
+    // function a_thread_requires_recaptcha_verification()
+    // {
+    //     unset(app()[Recaptcha::class]);
 
-        $this->publishThread(['g-recaptcha-response' => 'test'])
-            ->assertSessionHasErrors('g-recaptcha-response');
-    }
+    //     $this->publishThread(['g-recaptcha-response' => 'test'])
+    //         ->assertSessionHasErrors('g-recaptcha-response');
+    // }
 
     /** @test */
     function a_thread_requires_a_valid_channel()
